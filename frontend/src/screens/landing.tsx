@@ -1,10 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { useStream } from "../contexts/StreamContext";
 
 const Landing = () => {
-  const stream = useStream();
+  const [localStream, setLocalStream] = useState<null | MediaStream>(null);
+
+  const getStream = useCallback(async () => {
+    const streams = await window.navigator.mediaDevices.getUserMedia({
+      video: true,
+      // audio: true,
+    });
+
+    videoRef.current!.srcObject = streams;
+    setLocalStream(streams);
+  }, []);
 
   const [joinInput, setJoinInput] = useState("");
   const navigate = useNavigate();
@@ -16,7 +25,7 @@ const Landing = () => {
   }, []);
 
   useEffect(() => {
-    videoRef.current!.srcObject = stream;
+    getStream();
   }, []);
 
   return (
@@ -29,16 +38,6 @@ const Landing = () => {
       </div>
 
       <div className="mt-10 flex justify-center gap-10">
-        <div>
-          <label htmlFor="roomInput">Room Id: </label>
-          <input
-            className="text border-black border-2 pl-2"
-            type="text"
-            placeholder="room id"
-            id="roomInput"
-          />
-        </div>
-
         <button
           onClick={() => {
             createAndJoin();
@@ -65,7 +64,7 @@ const Landing = () => {
 
         <button
           onClick={() => {
-            navigate(`/room/${joinInput}`);
+            navigate(`/room/${joinInput.trim()}`);
           }}
           className="border-2  px-5 rounded-md bg-slate-600  text-white "
         >

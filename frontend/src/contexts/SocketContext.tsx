@@ -24,7 +24,7 @@ export default function SocketContextProvider({
   const [socket, setSocket] = useState<Socket | null>(null);
   const connectToWSS = useCallback(async () => {
     const socket = await io(URL);
-    console.log(socket);
+    // console.log(socket);
     setSocket(socket);
   }, []);
   useEffect(() => {

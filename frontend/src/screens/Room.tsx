@@ -1,18 +1,23 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSocket } from "../contexts/SocketContext";
-import Peer from "../utils/Peer";
+import Peer from "peerjs";
 
 const Room = () => {
   const pathname = useParams();
   const socket = useSocket();
   const [localStream, setLocalStream] = useState<null | MediaStream>(null);
   const [remoteStream, setRemoteStream] = useState<null | MediaStream>(null);
-  const [pc, setPc] = useState<null | Peer>(null);
+
+  // const [pc, setPc] = useState<null | Peer>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoRefRemote = useRef<HTMLVideoElement>(null);
 
+  const setRemoteStreamDisplay = useCallback((stream: MediaStream) => {
+    videoRefRemote.current!.srcObject = remoteStream;
+    setRemoteStream(stream);
+  }, []);
   const getStream = useCallback(async () => {
     const streams = await window.navigator.mediaDevices.getUserMedia({
       video: true,
@@ -25,11 +30,24 @@ const Room = () => {
 
   const addHandler = useCallback(
     (pc: Peer) => {
-      socket!.on("room:joined", async () => {
-        console.log("room:joined");
+      socket!.on("user-connected", async ({ userId }) => {
+        console.log("second user connected with peerId: " + userId);
+
+        const call = pc?.call(userId, localStream!);
+        console.log(call);
+        call?.on("stream", (stream) => {
+          console.log("second user is calling with stream.....");
+          setRemoteStreamDisplay(stream);
+        });
       });
-      socket!.on("simple-message", async (message) => {
-        console.log(message);
+
+      pc?.on("call", (call) => {
+        console.log("first user is calling....");
+        call.answer(localStream!);
+        call?.on("stream", (stream) => {
+          console.log("first user is sending stream.....");
+          setRemoteStreamDisplay(stream);
+        });
       });
 
       // socket!.on("send-offer", async () => {
@@ -71,15 +89,22 @@ const Room = () => {
     [socket]
   );
 
-  useEffect(() => {
-    setPc(new Peer());
-    getStream();
+  const connectToPeerServer = useCallback(async () => {
+    const pc = new Peer(undefined, { host: "/", port: "3001" });
+    pc?.on("open", () => {
+      console.log("peer connection established");
+      // setPc(pcPromise);
+      addHandler(pc);
+
+      console.log("my peer id: " + pc?.id);
+      socket?.emit("join:room", { roomId: pathname.roomid, userId: pc?.id });
+    });
   }, []);
 
   useEffect(() => {
-    socket?.emit("join:room", { roomId: pathname.roomid });
-    addHandler(pc!);
-  }, [pathname.roomid, socket]);
+    getStream();
+    connectToPeerServer();
+  }, [connectToPeerServer, getStream]);
 
   return (
     <>
@@ -92,10 +117,10 @@ const Room = () => {
       <div>
         <button
           onClick={() => {
-            localStream;
-            for (const track of localStream!.getTracks()) {
-              pc?.peer.addTrack(track, localStream!);
-            }
+            // localStream;
+            // for (const track of localStream!.getTracks()) {
+            //   pc?.peer.addTrack(track, localStream!);
+            // }
           }}
         >
           Call

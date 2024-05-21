@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import ReactPlayer from "react-player";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
@@ -11,13 +12,13 @@ const Landing = () => {
       // audio: true,
     });
 
-    videoRef.current!.srcObject = streams;
+    // videoRef.current!.srcObject = streams;
     setLocalStream(streams);
   }, []);
 
   const [joinInput, setJoinInput] = useState("");
   const navigate = useNavigate();
-  const videoRef = useRef<HTMLVideoElement>(null);
+  // const videoRef = useRef<HTMLVideoElement>(null);
 
   const createAndJoin = useCallback(() => {
     const roomId = uuidv4();
@@ -31,7 +32,13 @@ const Landing = () => {
   return (
     <>
       <div className="flex justify-center">
-        <video autoPlay ref={videoRef}></video>
+        <ReactPlayer
+          playing
+          muted
+          height="500px"
+          width="500px"
+          url={localStream!}
+        />
       </div>
       <div className="my-20 flex justify-center font-extrabold text-2xl">
         <h1>Check Your Hair</h1>

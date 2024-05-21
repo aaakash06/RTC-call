@@ -1,0 +1,100 @@
+  // socket!.on("send-offer", async () => {
+    //   console.log("pc2 wants offer");
+    //   const offer = await pc.getOffer();
+    //   socket!.emit("offer", { from: socket?.id, offer });
+    // });
+    // socket!.on("offer", async ({ offer }) => {
+    //   console.log("pc1 sent offer");
+    //   const answer = await pc.getAnswer(offer);
+    //   socket!.emit("answer", { from: socket?.id, answer });
+    // });
+    // socket!.on("answer", async ({ answer }) => {
+    //   console.log("pc2 sent answer");
+    //   pc.setAnswer(answer);
+    // });
+    // pc.peer.addEventListener("negotiation-needed", () => {
+    //   const offer = pc.getOffer();
+    //   socket!.emit("negotiation", { offer });
+    // });
+    // socket?.on("negotiation", ({ offer }) => {
+    //   const answer = pc.getAnswer(offer);
+    //   socket!.emit("negotiation-final", { from: socket?.id, answer });
+    // });
+    // socket?.on("negotiation-final", ({ answer }) => {
+    //   pc.setAnswer(answer);
+    //   socket.emit("negotiation-done");
+    // });
+    // pc.peer.addEventListener("track", (e) => {
+    //   const streams = e.streams;
+    //   setRemoteStream(streams[0]);
+    // });
+
+
+
+       // pc?.on("call", (callRemote) => {
+      //   console.log("first user is calling....");
+      //   callRemote.answer(streams);
+      //   callRemote?.on("stream", (stream) => {
+      //     console.log("first user is sending stream.....");
+      //     setRemoteStream(stream);
+      //   });
+      // });
+      // // pc.connect(userId);
+      // console.log("stream and userId before call: ");
+      // console.log(streams, userId);
+      // const call = pc!.call(userId, streams);
+      // // call.on("")
+      // console.log(call);
+      // call?.on("stream", (stream) => {
+      //   console.log("second user is calling with stream.....");
+      //   setRemoteStream(stream);
+      // });
+
+
+
+
+
+        //   useEffect(() => {
+  //     if (localStream) {
+  //       // connectToPeerServer();
+  //       const pc = new Peer(undefined, { host: "/", port: "3001" });
+  //       pc?.on("open", () => {
+
+  //         console.log("peer connection established");
+  //         console.log("my peer id: " + pc?.id);
+  // console.log("your peer Id: ", pc.id)
+  //         pc?.on("call", (callRemote) => {
+  //           console.log("first user is calling....");
+  //           callRemote.answer(localStream!);
+  //           callRemote?.on("stream", (stream) => {
+  //             console.log("first user is sending stream.....");
+  //             setRemoteStream(stream);
+  //           });
+
+  //           // addHandler(pc);
+  //           socket?.on("user-connected", async ({ userId }) => {
+  //             console.log("second user connected with peerId: " + userId);
+
+  //             console.log("stream before call: ");
+  //             console.log(localStream);
+  //             const call = pc!.call(userId, localStream!);
+
+  //             call?.on("stream", (stream) => {
+  //               console.log("second user is calling with stream.....");
+  //               setRemoteStream(stream);
+  //             });
+  //           });
+  //         });
+
+  //         socket?.emit("join:room", { roomId: pathname.roomid, userId: pc?.id });
+  //       });
+  //     }
+  //   }, [localStream]);
+
+  //   useEffect(()=>{
+  // if(called)
+  //   {
+  // const call =
+  //   }
+
+  //   },[called])

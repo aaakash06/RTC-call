@@ -101,6 +101,7 @@ const Room = () => {
             url={localStream!}
           />
         )}
+        <ReactPlayer playing height="500px" width="400px" url={remoteStream} />
       </div>
 
       <div className="mt-20 flex justify-center">
@@ -116,19 +117,6 @@ const Room = () => {
           Call
         </button>
       </div>
-
-      {remoteStream && (
-        <div className="absolute b-0">
-          {" "}
-          <h1>RemoteStream Acquired</h1>{" "}
-          <ReactPlayer
-            playing
-            height="500px"
-            width="400px"
-            url={remoteStream}
-          />{" "}
-        </div>
-      )}
     </>
   );
 };
